@@ -5,21 +5,37 @@ export default function Login() {
     email: '',
     password: ''
   });
+  
+// Email Validation check here... 
+  const emailIsInvalid = enteredInput.email !== "" && !enteredInput.email.includes("@");
 
   function handleSubmit(e) {
     e.preventDefault();
     console.log( enteredInput );
+    setEnteredInput({
+      email: '',
+      password: ''
+    })
   }
 
   function handleChangeInput(identifier, event) {
     setEnteredInput(prevValue => ({
       ...prevValue,
-      [identifier]: event.target.value 
+      [identifier]: event.target.value
+
     }))
   }
 
+  function handleReset(e) {
+    e.preventDefault(),
+    setEnteredInput({
+      email: '',
+      password: ''
+    })
+  }
+
   return (
-    <form onSubmit={handleSubmit}>
+    <form  onSubmit={handleSubmit}>
       <h2>Login</h2>
 
       <div className="control-row">
@@ -32,6 +48,9 @@ export default function Login() {
             value={enteredInput.email}
             onChange={(event) => handleChangeInput("email", event)}
           />
+          <div className="control-error">
+            {emailIsInvalid && <p>Please enter a correct Email</p>}
+          </div>
         </div>
 
         <div className="control no-margin">
@@ -47,8 +66,8 @@ export default function Login() {
       </div>
 
       <p className="form-actions">
-        <button className="button button-flat">Reset</button>
-        <button className="button">Login</button>
+        <button onClick={handleReset} className="button button-flat" >Reset</button>
+        <button className="button" >Login</button>
       </p>
     </form>
   );
