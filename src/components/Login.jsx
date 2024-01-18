@@ -5,29 +5,47 @@ export default function Login() {
     email: '',
     password: ''
   });
+
+  const [didEdit, setDidEdit] = useState({
+    email: false,
+    password: false
+  });
   
 // Email Validation check here... 
-  const emailIsInvalid = enteredInput.email !== "" && !enteredInput.email.includes("@");
+  const emailIsInvalid = didEdit.email && !enteredInput.email.includes("@");
 
-  function handleSubmit(e) {
-    e.preventDefault();
-    console.log( enteredInput );
+
+
+  function handleChangeInput(identifier, event) {
+    setEnteredInput(prevValue => ({
+      ...prevValue,
+      [identifier]: event.target.value
+    }))
+
+    setDidEdit(prevEdit => ({
+      ...prevEdit,
+      [identifier]: false
+    }))
+  }
+
+  function handleReset(e) {
+    e.preventDefault(),
     setEnteredInput({
       email: '',
       password: ''
     })
   }
 
-  function handleChangeInput(identifier, event) {
-    setEnteredInput(prevValue => ({
-      ...prevValue,
-      [identifier]: event.target.value
-
+  function handleInputBlur(identifier) {
+    setDidEdit(prevEdit => ({
+      ...prevEdit,
+      [identifier]: true
     }))
   }
-
-  function handleReset(e) {
-    e.preventDefault(),
+  
+  function handleSubmit(e) {
+    e.preventDefault();
+    console.log( enteredInput );
     setEnteredInput({
       email: '',
       password: ''
@@ -45,6 +63,7 @@ export default function Login() {
             id="email"
             type="email"
             name="email"
+            onBlur={() => handleInputBlur("email")}
             value={enteredInput.email}
             onChange={(event) => handleChangeInput("email", event)}
           />
